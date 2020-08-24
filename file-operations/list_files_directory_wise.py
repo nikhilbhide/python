@@ -17,7 +17,7 @@ def run():
             directories = os.listdir(directory_name)
             list_directories(directories)
         except FileNotFoundError:
-            print("directory does not exist in the file system")
+            print("Its wrong input. This directory does not exist in the file system")
 
 if __name__ == "__main__":
     run()
