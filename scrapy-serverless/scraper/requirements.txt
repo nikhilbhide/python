@@ -1,0 +1,3 @@
+Scrapy==2.3.0
+boto3==1.14.47
+itemadapter==0.1.0
