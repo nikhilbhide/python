@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: quote-scraper
+service: quote-service
 #app: your-app-name
 #tenant: your-tenant-name
 
@@ -68,8 +68,9 @@ region: ap-south-1
 functions:
   hello:
     handler: handler.hello
-  scrapeQuote:
+  scraper:
     handler: launcher.scrape
+    timeout: 300
   
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
