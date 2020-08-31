@@ -1,8 +1,9 @@
 import os
 import json
 import boto3
-from boto3.dynamodb.conditions import Key
+from boto3.dynamodb.conditions import Key, And
 import boto3
+from functools import reduce
 
 dynamodb = boto3.resource('dynamodb')
 
@@ -87,16 +88,19 @@ def get(event, context):
         author_name = queryParams.get("author_name")  
         quote = queryParams.get("quote")
         if validate_field(quote):
-            FilterExpression = ' AND '.join(['{0}=:{0}'.format(k) for k, v in queryParams.items()])
-            ExpressionAttributeValues = {':{}'.format(k): {'S': v} for k, v in queryParams.items()}
+            FilterExpression=reduce(And, ([Key(k).eq(v) for k, v in queryParams.items()]))
             print("ExpressionAttributeValues")
-            print(ExpressionAttributeValues)
+            print(FilterExpression)
              # fetch item from the database using quote as a key
-            result = table.get_item(
-                Key={
-                    ExpressionAttributeValues
-                }
-            )            
+            result = table.query(
+                KeyConditionExpression= FilterExpression
+             )
+            print(result)
+            response = {
+               "statusCode": 200,
+                "body": json.dumps(result['Items'])
+            }
+            return response     
         else:
             print("filter by only author")
             return get_by_author_name(author_name)
